@@ -43,7 +43,11 @@ socketServer.broadcast = function(data) {
 
 // HTTP Server to accept incomming MPEG-TS Stream from ffmpeg
 var streamServer = http.createServer( function(request, response) {
-	response.writeHead(200);
+	fs.readFile(__dirname + "/view-stream.html").then(contents => {
+            response.setHeader("Content-Type", "text/html");
+            response.writeHead(200);
+            response.end(contents);
+        })
     	
 	var params = request.url.substr(1).split('/');
 	socketServer.options.path = request.url.toString()
