@@ -8,7 +8,6 @@ var fs = require('fs'),
 	http = require('http'),
 	WebSocket = require('ws');
 
-
 var STREAM_SECRET = process.argv[2],
 	STREAM_PORT = process.argv[3] || 8081,
 	WEBSOCKET_PORT = process.argv[4] || 8082,
@@ -43,15 +42,15 @@ socketServer.broadcast = function(data) {
 
 // HTTP Server to accept incomming MPEG-TS Stream from ffmpeg
 var streamServer = http.createServer( function(request, response) {
-	fs.readFile(__dirname + "/view-stream.html").then(contents => {
-            response.setHeader("Content-Type", "text/html");
-            response.writeHead(200);
-            response.end(contents);
-        })
+
     	
 	var params = request.url.substr(1).split('/');
+	if(request.url === "/"){
+      		response.writeHead(200, { 'Content-Type':'text/html'});
+      		response.end("<div><p>Test<p></div>");
+   	}
 	socketServer.options.path = request.url.toString()
-
+	
 
 	response.connection.setTimeout(0);
 	console.log(
