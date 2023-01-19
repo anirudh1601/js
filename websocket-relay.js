@@ -5,7 +5,7 @@
 // ffmpeg -i <some input> -f mpegts http://localhost:8081/yoursecret
 
 var fs = require('fs'),
-	http = require('http'),
+	http = require('https'),
 	WebSocket = require('ws');
 
 const express = require('express')
