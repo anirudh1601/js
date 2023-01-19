@@ -37,6 +37,7 @@ const listen = function(request, response) {
 		request.socket.remotePort
 	);
 	request.on('data', function(data){
+		console.log('data from listen func')
 		socketServer.broadcast(data);
 		if (request.socket.recording) {
 			request.socket.recording.write(data);
