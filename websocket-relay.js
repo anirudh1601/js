@@ -21,6 +21,7 @@ var STREAM_SECRET = process.argv[2],
 
 
 var streamServer = http.createServer(function(request, response) {
+	response.connection.setTimeout(0);
         Console.log("connected")
 	console.log(
 		'Stream Connected: ' +
