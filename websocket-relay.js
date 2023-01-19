@@ -8,6 +8,9 @@ var fs = require('fs'),
 	http = require('http'),
 	WebSocket = require('ws');
 
+const express = require('express')
+
+const app = express()
 
 var STREAM_SECRET = process.argv[2],
 	STREAM_PORT = process.argv[3] || 8081,
