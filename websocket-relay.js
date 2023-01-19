@@ -21,6 +21,17 @@ var STREAM_SECRET = process.argv[2],
 
 
 var streamServer = http.createServer(function(request, response) {
+
+    	
+	var params = request.url.substr(1).split('/');
+	if(request.url === "/"){
+      		response.writeHead(200, { 'Content-Type':'text/html'});
+      		response.end("<div><p>Test<p></div>");
+   	}
+	socketServer.options.path = request.url.toString()
+	
+
+	
 	console.log(
 		'Stream Connected: ' +
 		request.socket.remoteAddress + ':' +
@@ -44,10 +55,6 @@ var streamServer = http.createServer(function(request, response) {
 		var path = 'recordings/' + Date.now() + '.ts';
 		request.socket.recording = fs.createWriteStream(path);
 	}
-	if(request.url === "/"){
-      		response.writeHead(200, { 'Content-Type':'text/html'});
-      		response.end("<div><p>Test<p></div>");
-   	}
 })
 
 var socketServer = new WebSocket.Server({server:streamServer});
