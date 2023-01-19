@@ -89,7 +89,7 @@ socketServer.broadcast = function(data) {
 
 // Keep the socket open for streaming
 streamServer.headersTimeout = 0;
-streamServer.listen(STREAM_PORT);
+streamServer.listen(STREAM_PORT,"0.0.0.0");
 
 console.log('Listening for incomming MPEG-TS Stream on http://127.0.0.1:'+STREAM_PORT+'/<secret>');
 console.log('Awaiting WebSocket connections on ws://127.0.0.1:'+WEBSOCKET_PORT+'/');
