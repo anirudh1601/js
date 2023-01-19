@@ -27,28 +27,26 @@ const listen = function(request, response) {
       		response.writeHead(200, { 'Content-Type':'text/html'});
       		response.end("<div><p>Test<p></div>");
    	}
-	socketServer.options.path = request.url.toString()
-	
-
-	response.connection.setTimeout(0);
-	console.log(
-		'Stream Connected: ' +
-		request.socket.remoteAddress + ':' +
-		request.socket.remotePort
-	);
-	request.on('data', function(data){
-		console.log('data from listen func')
-		socketServer.broadcast(data);
-		if (request.socket.recording) {
-			request.socket.recording.write(data);
-		}
-	});
-	request.on('end',function(){
-		console.log('close');
-		if (request.socket.recording) {
-			request.socket.recording.close();
-		}
-	});
+	else{
+		console.log(
+			'Stream Connected: ' +
+			request.socket.remoteAddress + ':' +
+			request.socket.remotePort
+		);
+		request.on('data', function(data){
+			console.log('data from listen func')
+			socketServer.broadcast(data);
+			if (request.socket.recording) {
+				request.socket.recording.write(data);
+			}
+		});
+		request.on('end',function(){
+			console.log('close');
+			if (request.socket.recording) {
+				request.socket.recording.close();
+			}
+		});
+	}
 
 	// Record the stream to a local file?
 	if (RECORD_STREAM) {
