@@ -19,7 +19,8 @@ var STREAM_SECRET = process.argv[2],
 
 // Websocket Server
 
-const listen = function(request, response) {
+
+var streamServer = http.createServer(function(request, response) {
 
     	
 	var params = request.url.substr(1).split('/');
@@ -27,34 +28,35 @@ const listen = function(request, response) {
       		response.writeHead(200, { 'Content-Type':'text/html'});
       		response.end("<div><p>Test<p></div>");
    	}
-	else{
-		console.log(
-			'Stream Connected: ' +
-			request.socket.remoteAddress + ':' +
-			request.socket.remotePort
-		);
-		request.on('data', function(data){
-			console.log('data from listen func')
-			socketServer.broadcast(data);
-			if (request.socket.recording) {
-				request.socket.recording.write(data);
-			}
-		});
-		request.on('end',function(){
-			console.log('close');
-			if (request.socket.recording) {
-				request.socket.recording.close();
-			}
-		});
-	}
+	socketServer.options.path = request.url.toString()
+	
+
+	response.connection.setTimeout(0);
+	console.log(
+		'Stream Connected: ' +
+		request.socket.remoteAddress + ':' +
+		request.socket.remotePort
+	);
+	request.on('data', function(data){
+		socketServer.broadcast(data);
+		if (request.socket.recording) {
+			request.socket.recording.write(data);
+		}
+	});
+	request.on('end',function(){
+		console.log('close');
+		if (request.socket.recording) {
+			request.socket.recording.close();
+		}
+	});
 
 	// Record the stream to a local file?
 	if (RECORD_STREAM) {
 		var path = 'recordings/' + Date.now() + '.ts';
 		request.socket.recording = fs.createWriteStream(path);
 	}
-}
-var streamServer = http.createServer(listen)
+})
+
 var socketServer = new WebSocket.Server({server:streamServer});
 socketServer.connectionCount = 0;
 socketServer.on('connection', function(socket, upgradeReq) {
