@@ -21,14 +21,7 @@ var STREAM_SECRET = process.argv[2],
 
 
 var streamServer = http.createServer(function(request, response) {
-
-    	
-	var params = request.url.substr(1).split('/');
-	
-	socketServer.options.path = request.url.toString()
-	
-
-	response.connection.setTimeout(0);
+        Console.log("connected")
 	console.log(
 		'Stream Connected: ' +
 		request.socket.remoteAddress + ':' +
