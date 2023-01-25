@@ -2,19 +2,14 @@
 // ffmpeg to feed the relay. ffmpeg -> websocket-relay -> browser
 // Example:
 // node websocket-relay yoursecret 8081 8082
+
 // ffmpeg -i <some input> -f mpegts http://localhost:8081/yoursecret
 
 var fs = require('fs'),
-	http = require('https'),
+	http = require('http'),
 	WebSocket = require('ws');
 
-const express = require('express')
-const options = {
-  key: fs.readFileSync("server.key"),
-  cert: fs.readFileSync("server.cert"),
-};
 
-const app = express()
 
 var STREAM_SECRET = process.argv[2],
 	STREAM_PORT = process.argv[3] || 8081,
@@ -24,7 +19,7 @@ var STREAM_SECRET = process.argv[2],
 // Websocket Server
 
 
-var streamServer = http.createServer((options),function(request, response) {
+var streamServer = http.createServer(function(request, response) {
 
     	
 	var params = request.url.substr(1).split('/');
@@ -93,7 +88,7 @@ socketServer.broadcast = function(data) {
 
 // Keep the socket open for streaming
 streamServer.headersTimeout = 0;
-streamServer.listen(STREAM_PORT,"0.0.0.0");
+streamServer.listen(STREAM_PORT);
 
 console.log('Listening for incomming MPEG-TS Stream on http://127.0.0.1:'+STREAM_PORT+'/<secret>');
 console.log('Awaiting WebSocket connections on ws://127.0.0.1:'+WEBSOCKET_PORT+'/');
