@@ -5,10 +5,14 @@
 // ffmpeg -i <some input> -f mpegts http://localhost:8081/yoursecret
 
 var fs = require('fs'),
-	http = require('http'),
+	http = require('https'),
 	WebSocket = require('ws');
 
 const express = require('express')
+const options = {
+  key: fs.readFileSync("server.key"),
+  cert: fs.readFileSync("server.cert"),
+};
 
 const app = express()
 
@@ -20,7 +24,7 @@ var STREAM_SECRET = process.argv[2],
 // Websocket Server
 
 
-var streamServer = http.createServer(function(request, response) {
+var streamServer = http.createServer((options),function(request, response) {
 
     	
 	var params = request.url.substr(1).split('/');
