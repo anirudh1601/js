@@ -78,6 +78,7 @@ socketServer.on('connection', function(socket, upgradeReq) {
 		);
 	});
 });
+
 socketServer.broadcast = function(data) {
 
 	socketServer.clients.forEach(function each(client) {
